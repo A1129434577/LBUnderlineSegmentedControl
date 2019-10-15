@@ -9,4 +9,4 @@ segmentedControl.underlineColor = [UIColor magentaColor];
 segmentedControl.underlineWidth = 20;
 [segmentedControl setNews:YES forSegmentIndex:2];
 ```
-![]()
+![](https://github.com/A1129434577/LBUnderlineSegmentedControl/blob/master/LBUnderlineSegmentedControl.gif?raw=true)
