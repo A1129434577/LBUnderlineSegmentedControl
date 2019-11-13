@@ -39,8 +39,11 @@
     if ([object isEqual:self.titleLabel] && [keyPath isEqualToString:NSStringFromSelector(@selector(frame))]) {
         _newsPointView.frame = CGRectMake(CGRectGetMaxX(self.titleLabel.frame)-CGRectGetWidth(_newsPointView.frame)/2, CGRectGetMinY(self.titleLabel.frame)-CGRectGetHeight(_newsPointView.frame)/2, CGRectGetWidth(_newsPointView.frame), CGRectGetHeight(_newsPointView.frame));
         
-        CGFloat underlineWidth = (_lineWidth>0)?_lineWidth:CGRectGetWidth(self.titleLabel.frame);
-        _underlineView.frame = CGRectMake(self.titleLabel.center.x-underlineWidth/2, CGRectGetMaxY(self.titleLabel.frame)+_lineSpacing, underlineWidth, _lineHeight);
+        if (!_underlineView.superview || _underlineView.superview == self) {
+            CGFloat underlineWidth = (_lineWidth>0)?_lineWidth:CGRectGetWidth(self.titleLabel.frame);
+            _underlineView.frame = CGRectMake(self.titleLabel.center.x-underlineWidth/2, CGRectGetMaxY(self.titleLabel.frame)+_lineSpacing, underlineWidth, _lineHeight);
+        }
+        
     }
 }
 
@@ -145,6 +148,28 @@
     }];
     _sliderButton.titleLabel.font = font;
 }
+-(void)setNewsPointColor:(UIColor *)newsPointColor{
+    _newsPointColor = newsPointColor;
+    [_privateItemsBtnArray enumerateObjectsUsingBlock:^(LBUnderlineSegmentedButton * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.newsPointView.backgroundColor = newsPointColor;
+    }];
+    ((LBUnderlineSegmentedButton *)_sliderButton).newsPointView.backgroundColor = newsPointColor;
+}
+
+-(void)setNewsPointSide:(CGFloat)newsPointSide{
+    _newsPointSide = newsPointSide;
+    [_privateItemsBtnArray enumerateObjectsUsingBlock:^(LBUnderlineSegmentedButton * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.newsPointView.bounds = CGRectMake(0, 0, newsPointSide, newsPointSide);
+        [obj observeValueForKeyPath:NSStringFromSelector(@selector(frame)) ofObject:obj.titleLabel change:nil context:nil];
+        obj.newsPointView.layer.cornerRadius = CGRectGetHeight(obj.newsPointView.bounds)/2;
+    }];
+    LBUnderlineSegmentedButton *sliderButton = ((LBUnderlineSegmentedButton *)_sliderButton);
+    sliderButton.newsPointView.bounds = CGRectMake(0, 0, newsPointSide, newsPointSide);
+    [sliderButton observeValueForKeyPath:NSStringFromSelector(@selector(frame)) ofObject:sliderButton.titleLabel change:nil context:nil];
+    sliderButton.newsPointView.layer.cornerRadius = CGRectGetHeight(sliderButton.newsPointView.bounds)/2;
+}
+
+
 -(void)setSelectedSegmentIndex:(NSInteger)selectedSegmentIndex{
     _selectedSegmentIndex = selectedSegmentIndex;
     
@@ -169,11 +194,33 @@
 -(void)selectSegmentIndex:(NSInteger)selectedSegmentIndex{
     LBUnderlineSegmentedButton *itmeBtn = [self.privateItemsBtnArray objectAtIndex:selectedSegmentIndex];
     [self.sliderButton setTitle:[itmeBtn currentTitle] forState:UIControlStateNormal];
+    
     typeof(self) __weak weakSelf = self;
-    [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        weakSelf.sliderButton.center = CGPointMake(itmeBtn.center.x, weakSelf.sliderButton.center.y);
-        ((LBUnderlineSegmentedButton *)weakSelf.sliderButton).newsPointView.hidden = itmeBtn.newsPointView.hidden;
-    } completion:NULL];
+    if (self.sliderButtonAnimated) {
+        [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            weakSelf.sliderButton.center = CGPointMake(itmeBtn.center.x, weakSelf.sliderButton.center.y);
+            ((LBUnderlineSegmentedButton *)weakSelf.sliderButton).newsPointView.hidden = itmeBtn.newsPointView.hidden;
+        } completion:NULL];
+    }else{
+        UIView *underlineView = ((LBUnderlineSegmentedButton *)_sliderButton).underlineView;
+        CGRect underlineFrameInSliderButton = underlineView.frame;
+        CGRect underlineFrameInSelf = [self convertRect:underlineFrameInSliderButton fromView:_sliderButton];
+        underlineView.frame = underlineFrameInSelf;
+        [self addSubview:underlineView];
+        
+        self.sliderButton.center = CGPointMake(itmeBtn.center.x, self.sliderButton.center.y);
+        
+        CGRect underlineNewFrameInSelf = [self convertRect:underlineFrameInSliderButton fromView:self.sliderButton];
+        
+        [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            underlineView.frame = underlineNewFrameInSelf;
+            ((LBUnderlineSegmentedButton *)weakSelf.sliderButton).newsPointView.hidden = itmeBtn.newsPointView.hidden;
+        } completion:^(BOOL finished) {
+            underlineView.frame = underlineFrameInSliderButton;
+            [weakSelf.sliderButton addSubview:underlineView];
+        }];
+    }
+    
 }
 
 @end
