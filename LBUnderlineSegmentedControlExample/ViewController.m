@@ -22,11 +22,13 @@
         
     }];
     segmentedControl.sliderButtonAnimated = NO;
+    segmentedControl.dampingAnimated = NO;
     segmentedControl.textColor = [UIColor blackColor];
     segmentedControl.selectedTextColor = [UIColor blueColor];
     segmentedControl.underlineColor = [UIColor magentaColor];
     segmentedControl.underlineWidth = 20;
     [segmentedControl setNews:YES forSegmentIndex:2];
+    segmentedControl.sliderButton.titleLabel.font = [UIFont systemFontOfSize:20];
     [self.view addSubview:segmentedControl];
 }
 

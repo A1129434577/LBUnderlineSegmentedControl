@@ -24,7 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign)CGFloat newsPointSide;//default 6.f
 
 @property (nonatomic,assign)NSInteger selectedSegmentIndex;
-@property (nonatomic,assign)BOOL sliderButtonAnimated;//标题动画
+@property (nonatomic,assign)BOOL sliderButtonAnimated;//标题动画default NO
+@property (nonatomic,assign)BOOL dampingAnimated;//弹簧动画default NO
 
 - (instancetype)initWithFrame:(CGRect)frame items:(NSArray <NSString *>*)items action:(void (^ _Nullable)(__weak UIButton *sliderButton,BOOL isSet))action;//isSet代表手动设置切换而非点击切换itme的
 -(void)setNews:(BOOL)showNews forSegmentIndex:(NSInteger)selectedSegmentIndex;

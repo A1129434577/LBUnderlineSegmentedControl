@@ -197,7 +197,7 @@
     
     typeof(self) __weak weakSelf = self;
     if (self.sliderButtonAnimated) {
-        [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:_dampingAnimated?0.6:1 initialSpringVelocity:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             weakSelf.sliderButton.center = CGPointMake(itmeBtn.center.x, weakSelf.sliderButton.center.y);
             ((LBUnderlineSegmentedButton *)weakSelf.sliderButton).newsPointView.hidden = itmeBtn.newsPointView.hidden;
         } completion:NULL];
@@ -212,7 +212,7 @@
         
         CGRect underlineNewFrameInSelf = [self convertRect:underlineFrameInSliderButton fromView:self.sliderButton];
         
-        [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:_dampingAnimated?0.6:1 initialSpringVelocity:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             underlineView.frame = underlineNewFrameInSelf;
             ((LBUnderlineSegmentedButton *)weakSelf.sliderButton).newsPointView.hidden = itmeBtn.newsPointView.hidden;
         } completion:^(BOOL finished) {
