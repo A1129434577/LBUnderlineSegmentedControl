@@ -184,7 +184,7 @@
 }
 
 -(void)itemSelectedAction:(LBUnderlineSegmentedButton *)sender{
-    [self setSelectedSegmentIndex:[_privateItemsBtnArray indexOfObject:sender]];
+    [self selectSegmentIndex:[_privateItemsBtnArray indexOfObject:sender]];
     
     typeof(self) __weak weakSelf = self;
     self.itemSeletedBlock?
