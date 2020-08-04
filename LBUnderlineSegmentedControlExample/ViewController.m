@@ -19,7 +19,6 @@
     // Do any additional setup after loading the view.
     self.title = @"LBUnderlineSegmentedControl";
     LBUnderlineSegmentedControl *segmentedControl = [[LBUnderlineSegmentedControl alloc] initWithFrame:CGRectMake(0, 200, CGRectGetWidth(self.view.frame), 60) items:@[@"大象",@"美洲豹",@"河马",@"齐天大圣"] action:^(UIButton *__weak  _Nonnull sliderButton, BOOL isSet) {
-        
     }];
     segmentedControl.sliderButtonAnimated = NO;
     segmentedControl.dampingAnimated = NO;
