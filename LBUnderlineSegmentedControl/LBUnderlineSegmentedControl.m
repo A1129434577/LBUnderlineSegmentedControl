@@ -199,10 +199,14 @@
     LBUnderlineSegmentedButton *itmeBtn = [self.privateItemsBtnArray objectAtIndex:selectedSegmentIndex];
     
     //如果滑块和item的字体大小不一样，则有放大缩小的动画
+    itmeBtn.transform = CGAffineTransformScale(CGAffineTransformIdentity, itmeBtn.titleLabel.font.pointSize/self.sliderButton.titleLabel.font.pointSize, itmeBtn.titleLabel.font.pointSize/self.sliderButton.titleLabel.font.pointSize);
     LBUnderlineSegmentedButton *lastItmeBtn = [self.privateItemsBtnArray objectAtIndex:self.selectedSegmentIndex];
-    lastItmeBtn.transform = CGAffineTransformScale(CGAffineTransformIdentity, self.sliderButton.titleLabel.font.pointSize/itmeBtn.titleLabel.font.pointSize, self.sliderButton.titleLabel.font.pointSize/itmeBtn.titleLabel.font.pointSize);
+    if (lastItmeBtn != itmeBtn) {
+        lastItmeBtn.transform = CGAffineTransformScale(CGAffineTransformIdentity, self.sliderButton.titleLabel.font.pointSize/itmeBtn.titleLabel.font.pointSize, self.sliderButton.titleLabel.font.pointSize/itmeBtn.titleLabel.font.pointSize);
+    }
     self.sliderButton.transform = CGAffineTransformScale(CGAffineTransformIdentity, itmeBtn.titleLabel.font.pointSize/self.sliderButton.titleLabel.font.pointSize, itmeBtn.titleLabel.font.pointSize/self.sliderButton.titleLabel.font.pointSize);
     [UIView animateWithDuration:0.3 animations:^{
+        itmeBtn.transform = CGAffineTransformIdentity;
         self.sliderButton.transform  = CGAffineTransformIdentity;
         lastItmeBtn.transform  = CGAffineTransformIdentity;
     } completion:nil];
